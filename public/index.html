@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="RuangTemu - panggilan video dan berbagi layar langsung dari browser. Tanpa akun, tanpa unduhan, jalan di laptop dan Android.">
+  <meta name="theme-color" content="#070b14">
+  <meta name="color-scheme" content="dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RuangTemu">
+  <title>RuangTemu - Video call &amp; berbagi layar</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./meeting.css">
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-video" viewBox="0 0 24 24">
+        <rect x="2.5" y="6" width="13" height="12" rx="3"/>
+        <path d="M15.5 10.2 21 7.5v9l-5.5-2.7"/>
+      </symbol>
+      <symbol id="i-video-off" viewBox="0 0 24 24">
+        <path d="M15.5 9.5V9a3 3 0 0 0-3-3H5.8"/>
+        <path d="M2.6 6.4A3 3 0 0 0 2.5 7v10a3 3 0 0 0 3 3h10a3 3 0 0 0 2.4-1.2"/>
+        <path d="m15.5 10.2 5.5-2.7v9l-3.4-1.7"/>
+        <path d="m3 3 18 18"/>
+      </symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24">
+        <rect x="9" y="2.5" width="6" height="11" rx="3"/>
+        <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>
+      </symbol>
+      <symbol id="i-mic-off" viewBox="0 0 24 24">
+        <path d="M9 9V5.5a3 3 0 0 1 6 0V12a3 3 0 0 1-.5 1.6"/>
+        <path d="M5.5 11a6.5 6.5 0 0 0 10 5.5M18.5 11a6.4 6.4 0 0 1-.5 2.5M12 17.5V21M9 21h6"/>
+        <path d="m3 3 18 18"/>
+      </symbol>
+      <symbol id="i-screen" viewBox="0 0 24 24">
+        <rect x="2.5" y="4" width="19" height="13" rx="2.5"/>
+        <path d="M8 21h8M12 17v4"/>
+        <path d="m9.5 8.5 5 2.5-5 2.5z"/>
+      </symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24">
+        <path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.6A8.5 8.5 0 1 1 20.5 11.5Z"/>
+        <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/>
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3.2"/>
+        <path d="M2.8 20a6.2 6.2 0 0 1 12.4 0"/>
+        <path d="M16.2 5.2a3.2 3.2 0 0 1 0 6.1M17 14.5a5.8 5.8 0 0 1 4.2 5.5"/>
+      </symbol>
+      <symbol id="i-phone-off" viewBox="0 0 24 24">
+        <path d="M6.6 3.5 9 8.4a2 2 0 0 1-.5 2.3l-1 1a15.4 15.4 0 0 0 4.8 4.8l1-1a2 2 0 0 1 2.3-.5l4.9 2.4a2 2 0 0 1 1 2.4l-.6 1.6a2 2 0 0 1-2.4 1.2C9 20.7 3.3 15 1.4 6.5A2 2 0 0 1 2.6 4l1.6-.6a2 2 0 0 1 2.4.1Z"/>
+        <path d="m3 3 18 18"/>
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24">
+        <rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/>
+        <path d="M15.5 5.5v-1a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m4.5 12.5 5 5 10-11"/>
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 24 24">
+        <path d="m5 5 14 14M19 5 5 19"/>
+      </symbol>
+      <symbol id="i-send" viewBox="0 0 24 24">
+        <path d="m21 3-7.5 18-3.2-7.3L3 10.5Z"/>
+        <path d="M10.3 13.7 21 3"/>
+      </symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24">
+        <rect x="4.5" y="10" width="15" height="11" rx="2.5"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+      </symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24">
+        <path d="M12 2.8 20 6v5.7c0 5-3.3 8.3-8 9.5-4.7-1.2-8-4.5-8-9.5V6Z"/>
+        <path d="m8.5 12 2.3 2.3 4.7-5"/>
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24">
+        <path d="M4 12h16M14 6l6 6-6 6"/>
+      </symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24">
+        <path d="M20.5 11a8.5 8.5 0 1 0-2.1 6.4"/>
+        <path d="M20.5 4.5V11H14"/>
+      </symbol>
+      <symbol id="i-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>
+      </symbol>
+      <symbol id="i-user-plus" viewBox="0 0 24 24">
+        <circle cx="9.5" cy="8" r="3.7"/>
+        <path d="M2.8 20.5a6.7 6.7 0 0 1 13.4 0M19 8v6M16 11h6"/>
+      </symbol>
+      <symbol id="i-hash" viewBox="0 0 24 24">
+        <path d="M5 9h15M4 15h15M10 3.5 8 20.5M17 3.5l-2 17"/>
+      </symbol>
+      <symbol id="i-laptop" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="16" height="11" rx="2"/>
+        <path d="M2 19.5h20"/>
+      </symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24">
+        <rect x="6.5" y="2.5" width="11" height="19" rx="3"/>
+        <path d="M10.5 18.5h3"/>
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 24 24">
+        <path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>
+      </symbol>
+      <symbol id="i-volume-x" viewBox="0 0 24 24">
+        <path d="M11 4.5 6.5 8.5H3v7h3.5l4.5 4Z"/>
+        <path d="m16 9.5 5 5M21 9.5l-5 5"/>
+      </symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24">
+        <path d="M11 4.5 6.5 8.5H3v7h3.5l4.5 4Z"/>
+        <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>
+      </symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24">
+        <path d="M12 2.5 14 9l6.5 2-6.5 2L12 19.5 10 13l-6.5-2L10 9Z"/>
+        <path d="M19 3v4M17 5h4"/>
+      </symbol>
+      <symbol id="i-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9.2"/>
+        <path d="M12 10.5V17M12 7.2h.01"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#mainContent">Lewati ke konten</a>
+  <div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+
+  <!-- ============================ LOBBY ============================ -->
+  <div class="view lobby" id="lobbyView">
+    <div class="ambient" aria-hidden="true">
+      <span class="ambient-orb orb-a"></span>
+      <span class="ambient-orb orb-b"></span>
+      <span class="ambient-orb orb-c"></span>
+      <span class="ambient-grid"></span>
+    </div>
+
+    <header class="lobby-top">
+      <a class="brand" href="./" aria-label="RuangTemu">
+        <span class="brand-mark"><svg class="icon"><use href="#i-video"></use></svg></span>
+        <span class="brand-word">Ruang<span>Temu</span></span>
+        <span class="brand-tag">Beta</span>
+      </a>
+      <div class="lobby-top-right">
+        <span class="secure-pill"><svg class="icon"><use href="#i-lock"></use></svg> Peer-to-peer</span>
+        <a class="help-link" href="https://developer.mozilla.org/id/docs/Web/API/WebRTC_API" target="_blank" rel="noreferrer">
+          <svg class="icon"><use href="#i-info"></use></svg><span>Tentang WebRTC</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="lobby-main" id="mainContent">
+      <section class="hero">
+        <p class="eyebrow"><span class="pulse-dot"></span> Video conference langsung dari browser</p>
+        <h1>Ketemu, ngobrol,<br><span class="gradient-text">bagi layar.</span></h1>
+        <p class="lede">Panggilan video yang ringan untuk rapat kecil, kelas online, atau obrolan keluarga. Tanpa akun, tanpa unduhan, tanpa ribet.</p>
+
+        <ul class="feature-list">
+          <li>
+            <span class="feature-icon"><svg class="icon"><use href="#i-video"></use></svg></span>
+            <span><strong>Video &amp; audio</strong><small>Kualitas jernih, langsung terhubung</small></span>
+          </li>
+          <li>
+            <span class="feature-icon"><svg class="icon"><use href="#i-screen"></use></svg></span>
+            <span><strong>Berbagi layar</strong><small>Presentasi, slide, atau demo</small></span>
+          </li>
+          <li>
+            <span class="feature-icon"><svg class="icon"><use href="#i-chat"></use></svg></span>
+            <span><strong>Obrolan teks</strong><small>Kirim tautan tanpa keluar ruang</small></span>
+          </li>
+        </ul>
+
+        <div class="works-on">
+          <span class="works-label">Jalan di</span>
+          <span class="works-chip"><svg class="icon"><use href="#i-laptop"></use></svg> Laptop</span>
+          <span class="works-chip"><svg class="icon"><use href="#i-phone"></use></svg> Android</span>
+          <span class="works-note">Gunakan Chrome, Edge, atau Firefox terbaru</span>
+        </div>
+      </section>
+
+      <section class="join-card" aria-labelledby="joinTitle">
+        <div class="preview" id="preview">
+          <video id="lobbyVideo" autoplay muted playsinline></video>
+          <div class="preview-scrim"></div>
+          <span class="preview-badge"><span class="pulse-dot small"></span> Pratinjau</span>
+
+          <div class="preview-empty" id="previewEmpty">
+            <span class="preview-orb"><svg class="icon"><use href="#i-video"></use></svg></span>
+            <p id="previewEmptyText">Aktifkan kamera untuk melihat pratinjau</p>
+            <button class="btn-mini" type="button" id="enablePreviewBtn">
+              <svg class="icon"><use href="#i-video"></use></svg> Nyalakan kamera
+            </button>
+          </div>
+
+          <div class="preview-avatar" id="lobbyAvatar" hidden>
+            <span class="big-avatar" id="lobbyInitials">?</span>
+            <small>Kamera mati</small>
+          </div>
+
+          <div class="preview-controls">
+            <button class="media-toggle" type="button" id="lobbyMicBtn" aria-label="Matikan mikrofon" aria-pressed="true">
+              <svg class="icon on-icon"><use href="#i-mic"></use></svg>
+              <svg class="icon off-icon"><use href="#i-mic-off"></use></svg>
+            </button>
+            <button class="media-toggle" type="button" id="lobbyCamBtn" aria-label="Matikan kamera" aria-pressed="true">
+              <svg class="icon on-icon"><use href="#i-video"></use></svg>
+              <svg class="icon off-icon"><use href="#i-video-off"></use></svg>
+            </button>
+          </div>
+          <span class="preview-name" id="previewName">Kamu</span>
+        </div>
+
+        <form class="join-form" id="joinForm" novalidate>
+          <div class="card-heading">
+            <h2 id="joinTitle">Gabung ke ruang</h2>
+            <p>Masukkan nama dan kode ruang dari temanmu.</p>
+          </div>
+
+          <label class="field" for="nameInput">
+            <span class="field-label">Nama kamu</span>
+            <span class="input-shell">
+              <svg class="icon"><use href="#i-user"></use></svg>
+              <input id="nameInput" name="name" type="text" maxlength="40" autocomplete="nickname" placeholder="cth. Nadia" required>
+            </span>
+          </label>
+
+          <label class="field" for="roomInput">
+            <span class="field-label">Kode ruang <em>huruf besar &amp; angka</em></span>
+            <span class="input-shell room-shell">
+              <svg class="icon"><use href="#i-hash"></use></svg>
+              <input id="roomInput" name="room" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="cth. KOPI-7Q2" required>
+              <button class="inline-button" type="button" id="newRoomBtn" title="Buat kode ruang baru" aria-label="Buat kode ruang baru">
+                <svg class="icon"><use href="#i-refresh"></use></svg>
+              </button>
+            </span>
+          </label>
+
+          <p class="form-error" id="formError" role="alert" hidden></p>
+
+          <button class="btn-primary join-button" id="joinBtn" type="submit">
+            <span id="joinBtnText">Gabung sekarang</span>
+            <span class="join-spinner" id="joinSpinner" hidden></span>
+            <svg class="icon join-arrow" id="joinArrow"><use href="#i-arrow-right"></use></svg>
+          </button>
+
+          <p class="card-note"><svg class="icon"><use href="#i-shield"></use></svg> Media terenkripsi dan mengalir langsung antarpeserta.</p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="lobby-footer">
+      <span>&copy; <span id="year">2026</span> RuangTemu</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span>Ditenagai WebRTC</span>
+      <span class="footer-spacer"></span>
+      <span class="footer-note">Tetap dekat, walau berjauhan.</span>
+    </footer>
+  </div>
+
+  <!-- ============================ MEETING ============================ -->
+  <div class="view meeting" id="meetingView" hidden>
+    <header class="meeting-header">
+      <div class="brand brand-small" aria-label="RuangTemu">
+        <span class="brand-mark"><svg class="icon"><use href="#i-video"></use></svg></span>
+        <span class="brand-word">Ruang<span>Temu</span></span>
+      </div>
+
+      <button class="room-pill" id="roomPill" type="button" title="Salin tautan undangan">
+        <span class="room-pill-label">Ruang</span>
+        <span class="room-code" id="meetingRoom">----</span>
+        <svg class="icon"><use href="#i-copy"></use></svg>
+      </button>
+
+      <div class="meeting-meta">
+        <span class="conn-pill" id="connPill" data-state="connecting">
+          <span class="conn-dot"></span>
+          <span id="connText">Menghubungkan</span>
+        </span>
+        <span class="meeting-time" id="meetingTime">00:00</span>
+        <button class="btn-ghost invite-button" id="inviteBtn" type="button">
+          <svg class="icon"><use href="#i-user-plus"></use></svg>
+          <span>Undang</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="reconnect" id="reconnectBanner" hidden>
+      <span class="spinner"></span>
+      <span id="reconnectText">Menyambung ulang...</span>
+      <button class="btn-mini" type="button" id="reloadBtn" hidden>Muat ulang</button>
+    </div>
+
+    <div class="media-warning" id="mediaWarning" hidden>
+      <svg class="icon"><use href="#i-video-off"></use></svg>
+      <span id="mediaWarningText">Kamera dan mikrofon tidak aktif.</span>
+      <button class="text-button" type="button" id="retryMediaBtn">Coba nyalakan</button>
+    </div>
+
+    <main class="meeting-stage">
+      <div class="grid-wrap">
+        <div class="video-grid" id="videoGrid"></div>
+
+        <div class="alone-hint" id="aloneHint">
+          <span class="alone-icon"><svg class="icon"><use href="#i-sparkle"></use></svg></span>
+          <div class="alone-copy">
+            <strong>Ruang ini masih sepi</strong>
+            <span>Bagikan tautan agar teman bisa bergabung.</span>
+          </div>
+          <button class="btn-mini" type="button" id="aloneInviteBtn">
+            <svg class="icon"><use href="#i-user-plus"></use></svg> Undang
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-scrim" id="panelScrim" hidden></div>
+
+      <aside class="side-panel" id="sidePanel" aria-label="Panel ruang" hidden>
+        <div class="panel-top">
+          <div class="panel-tabs" role="tablist" aria-label="Panel ruang">
+            <button class="panel-tab is-active" id="tabChat" type="button" role="tab" aria-selected="true" aria-controls="chatPane">Obrolan</button>
+            <button class="panel-tab" id="tabPeople" type="button" role="tab" aria-selected="false" aria-controls="peoplePane">
+              Peserta <span class="tab-count" id="peopleTabCount">1</span>
+            </button>
+          </div>
+          <button class="icon-btn" id="panelCloseBtn" type="button" aria-label="Tutup panel">
+            <svg class="icon"><use href="#i-x"></use></svg>
+          </button>
+        </div>
+
+        <section class="panel-pane chat-pane" id="chatPane" role="tabpanel" aria-labelledby="tabChat">
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <form class="chat-form" id="chatForm">
+            <label class="sr-only" for="chatInput">Tulis pesan</label>
+            <input id="chatInput" type="text" maxlength="2000" autocomplete="off" placeholder="Tulis pesan...">
+            <button class="send-button" type="submit" aria-label="Kirim pesan">
+              <svg class="icon"><use href="#i-send"></use></svg>
+            </button>
+          </form>
+          <p class="panel-note"><svg class="icon"><use href="#i-info"></use></svg> Pesan hanya terkirim ke peserta di ruang ini.</p>
+        </section>
+
+        <section class="panel-pane people-pane" id="peoplePane" role="tabpanel" aria-labelledby="tabPeople" hidden>
+          <div class="people-list" id="peopleList"></div>
+          <div class="people-footer">
+            <p>Butuh teman ngobrol?</p>
+            <button class="btn-ghost full-width" type="button" id="panelInviteBtn">
+              <svg class="icon"><use href="#i-user-plus"></use></svg> Undang peserta
+            </button>
+            <p class="panel-note"><svg class="icon"><use href="#i-lock"></use></svg> Tautan ruang adalah kunci masukmu.</p>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <div class="unmute-nudge" id="unmuteNudge" hidden>
+      <button class="unmute-button" type="button" id="unmuteAllBtn">
+        <svg class="icon"><use href="#i-volume-x"></use></svg>
+        <span>Aktifkan suara peserta</span>
+      </button>
+    </div>
+
+    <footer class="control-dock">
+      <div class="dock-side dock-left">
+        <button class="people-pill" id="peopleBtn" type="button" title="Lihat peserta">
+          <svg class="icon"><use href="#i-users"></use></svg>
+          <span id="participantCount">1</span>
+        </button>
+        <span class="dock-room" id="dockRoom">RUANG</span>
+      </div>
+
+      <div class="dock-controls">
+        <button class="dock-btn" id="micBtn" type="button" data-on="true" aria-pressed="true" aria-label="Matikan mikrofon">
+          <span class="dock-icon">
+            <svg class="icon icon-on"><use href="#i-mic"></use></svg>
+            <svg class="icon icon-off"><use href="#i-mic-off"></use></svg>
+          </span>
+          <span class="dock-label">Mikrofon</span>
+        </button>
+        <button class="dock-btn" id="camBtn" type="button" data-on="true" aria-pressed="true" aria-label="Matikan kamera">
+          <span class="dock-icon">
+            <svg class="icon icon-on"><use href="#i-video"></use></svg>
+            <svg class="icon icon-off"><use href="#i-video-off"></use></svg>
+          </span>
+          <span class="dock-label">Kamera</span>
+        </button>
+        <button class="dock-btn" id="shareBtn" type="button" data-on="false" aria-pressed="false" aria-label="Bagikan layar">
+          <span class="dock-icon">
+            <svg class="icon"><use href="#i-screen"></use></svg>
+          </span>
+          <span class="dock-label">Layar</span>
+        </button>
+        <button class="dock-btn" id="chatBtn" type="button" data-on="false" aria-pressed="false" aria-label="Buka obrolan">
+          <span class="dock-icon">
+            <svg class="icon"><use href="#i-chat"></use></svg>
+            <span class="unread-badge" id="chatUnread" hidden>0</span>
+          </span>
+          <span class="dock-label">Obrolan</span>
+        </button>
+      </div>
+
+      <div class="dock-side dock-right">
+        <button class="leave-button" id="leaveBtn" type="button" aria-label="Keluar dari ruang">
+          <span class="dock-icon"><svg class="icon"><use href="#i-phone-off"></use></svg></span>
+          <span class="dock-label">Keluar</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ============================ DIALOG ============================ -->
+  <dialog class="invite-dialog" id="inviteDialog" aria-labelledby="inviteTitle">
+    <form method="dialog" class="dialog-close-form">
+      <button class="icon-btn dialog-close" type="submit" aria-label="Tutup dialog">
+        <svg class="icon"><use href="#i-x"></use></svg>
+      </button>
+    </form>
+    <div class="dialog-orb"><svg class="icon"><use href="#i-user-plus"></use></svg></div>
+    <h2 id="inviteTitle">Undang ke ruang</h2>
+    <p class="dialog-lede">Bagikan tautan atau kode ruang ini. Siapa pun yang punya akses bisa langsung bergabung.</p>
+
+    <div class="invite-code-row">
+      <div class="invite-code-block">
+        <span class="invite-label">Kode ruang</span>
+        <span class="invite-code" id="inviteCode">----</span>
+      </div>
+      <button class="btn-ghost" id="copyCodeBtn" type="button">
+        <svg class="icon"><use href="#i-copy"></use></svg> Salin kode
+      </button>
+    </div>
+
+    <div class="invite-link-block">
+      <span class="invite-label">Tautan undangan</span>
+      <div class="invite-link-row">
+        <input id="inviteLink" type="text" readonly aria-label="Tautan undangan">
+        <button class="icon-btn" id="copyLinkIconBtn" type="button" aria-label="Salin tautan undangan">
+          <svg class="icon"><use href="#i-copy"></use></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn-primary" id="copyLinkBtn" type="button">
+        <svg class="icon"><use href="#i-copy"></use></svg> Salin tautan
+      </button>
+      <button class="btn-ghost" id="shareLinkBtn" type="button">
+        <svg class="icon"><use href="#i-send"></use></svg> Bagikan
+      </button>
+    </div>
+
+    <p class="dialog-note"><svg class="icon"><use href="#i-lock"></use></svg> Ruang tidak terkunci. Jangan bagikan tautan ini ke tempat publik.</p>
+  </dialog>
+
+  <noscript>
+    <div class="noscript">RuangTemu membutuhkan JavaScript untuk panggilan video. Aktifkan JavaScript lalu muat ulang halaman.</div>
+  </noscript>
+</body>
+</html>

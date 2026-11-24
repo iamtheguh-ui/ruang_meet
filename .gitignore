@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+.venv
+
+# Self-signed sertifikat (tidak dibagikan)
+certs/
+*.pem
+*.key
+
+# Hasil uji screenshot otomatis
+tests/artifacts/
