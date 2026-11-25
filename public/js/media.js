@@ -16,6 +16,14 @@ const VIDEO_CONSTRAINTS = {
 
 const PERMISSION_ERRORS = new Set(["NotAllowedError", "PermissionDeniedError", "SecurityError"]);
 
+const FALLBACK_AUDIO_CONSTRAINTS = {};
+const FALLBACK_VIDEO_CONSTRAINTS = {
+  width: { ideal: 640 },
+  height: { ideal: 480 },
+  frameRate: { ideal: 15, max: 15 },
+  facingMode: "user",
+};
+
 export class MediaManager {
   constructor({ onMediaChange, onScreenChange } = {}) {
     this.onMediaChange = onMediaChange;
@@ -108,9 +116,23 @@ export class MediaManager {
       this._attachStream(stream);
     } catch (error) {
       result.error = error;
-      // Bila satu perangkat tidak ada, coba sisanya secara terpisah agar
-      // mikrofon tetap bisa dipakai saat kamera tidak tersedia (dan sebaliknya).
-      if (needAudio && needVideo && !PERMISSION_ERRORS.has(error?.name)) {
+      if (!PERMISSION_ERRORS.has(error?.name)) {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: needAudio ? FALLBACK_AUDIO_CONSTRAINTS : false,
+            video: needVideo ? FALLBACK_VIDEO_CONSTRAINTS : false,
+          });
+          this._attachStream(stream);
+          error = null;
+          result.error = null;
+        } catch (fallbackError) {
+          error = fallbackError;
+          result.error = fallbackError;
+        }
+      }
+      if (!stream && needAudio && needVideo) {
+        // Bila satu perangkat tidak ada, coba sisanya secara terpisah agar
+        // mikrofon tetap bisa dipakai saat kamera tidak tersedia (dan sebaliknya).
         const [audioResult, videoResult] = await Promise.allSettled([
           navigator.mediaDevices.getUserMedia({ audio: AUDIO_CONSTRAINTS, video: false }),
           navigator.mediaDevices.getUserMedia({ audio: false, video: VIDEO_CONSTRAINTS }),
@@ -120,7 +142,7 @@ export class MediaManager {
         else failures.push(audioResult.reason);
         if (videoResult.status === "fulfilled") this._attachStream(videoResult.value);
         else failures.push(videoResult.reason);
-        result.error = failures.find((failure) => !PERMISSION_ERRORS.has(failure?.name)) || failures[0] || error;
+        result.error = failures.find((failure) => !PERMISSION_ERRORS.has(failure?.name)) || failures[0] || null;
       }
     }
 
