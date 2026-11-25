@@ -1057,6 +1057,16 @@ function handleRemoteStream(id, stream) {
     tile.video.srcObject = stream;
     if (state.audioBlocked) tile.video.muted = true;
   }
+  const audioTrack = stream.getAudioTracks()[0];
+  if (audioTrack) {
+    const audioStream = new MediaStream([audioTrack]);
+    if (tile.audio.srcObject !== audioStream) {
+      tile.audio.srcObject = audioStream;
+      tryPlayRemoteAudio(tile);
+    }
+  } else if (tile.audio.srcObject) {
+    tile.audio.srcObject = null;
+  }
   if (stream.getTracks().length) tile.statusEl.hidden = true;
   tryPlayRemoteVideo(tile);
   media?.setRemoteMeter(id, stream);
@@ -1099,6 +1109,16 @@ function buildTile(id, info, isSelf) {
   } else {
     video.setAttribute("aria-label", `Video ${name}`);
   }
+
+  const audio = document.createElement("audio");
+  audio.autoplay = true;
+  audio.playsInline = true;
+  audio.setAttribute("playsinline", "");
+  audio.style.position = "absolute";
+  audio.style.width = "0";
+  audio.style.height = "0";
+  audio.style.opacity = "0";
+  audio.style.pointerEvents = "none";
 
   const avatar = document.createElement("div");
   avatar.className = "tile-avatar";
@@ -1144,13 +1164,14 @@ function buildTile(id, info, isSelf) {
   micEl.append(makeIcon("mic-off"));
   bottom.append(nameEl, tagSelf, tagHost, micEl);
 
-  el.append(video, avatar, topline, bottom);
+  el.append(video, audio, avatar, topline, bottom);
 
   const tile = {
     id,
     name,
     el,
     video,
+    audio,
     initial,
     hint,
     nameEl,
@@ -1611,20 +1632,31 @@ function tryPlayRemoteVideo(tile) {
   });
 }
 
+function tryPlayRemoteAudio(tile) {
+  const promise = tile.audio.play();
+  if (!promise?.catch) return;
+  promise.catch((error) => {
+    if (error?.name === "AbortError") return;
+    tile.audio.muted = true;
+    tile.audio.play().catch(() => {});
+    setAudioBlocked(true);
+  });
+}
+
 async function unmuteAll() {
   media?.resumeAudio();
-  const videos = [...state.tiles.entries()]
+  const mediaElements = [...state.tiles.entries()]
     .filter(([id]) => id !== "self")
-    .map(([, tile]) => tile.video);
-  if (!videos.length) {
+    .flatMap(([, tile]) => [tile.video, tile.audio]);
+  if (!mediaElements.length) {
     setAudioBlocked(false);
     return;
   }
-  for (const video of videos) video.muted = false;
-  const results = await Promise.allSettled(videos.map((video) => video.play()));
+  for (const element of mediaElements) element.muted = false;
+  const results = await Promise.allSettled(mediaElements.map((element) => element.play()));
   const failed = results.some((result) => result.status === "rejected");
   if (failed) {
-    for (const video of videos) video.muted = true;
+    for (const element of mediaElements) element.muted = true;
     showToast("Browser masih memblokir suara. Ketuk tombol ini sekali lagi.", { type: "warning" });
     return;
   }
