@@ -203,7 +203,11 @@ export class MediaManager {
     if (this.hasScreen()) return this.screen;
 
     const stream = await navigator.mediaDevices.getDisplayMedia({
-      video: { frameRate: { ideal: 30, max: 30 } },
+      video: {
+        frameRate: { ideal: 30, max: 30 },
+        width: { ideal: 2560 },
+        height: { ideal: 1080 },
+      },
       audio: false,
     });
     const track = stream.getVideoTracks()[0];

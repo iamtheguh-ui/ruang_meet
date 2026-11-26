@@ -254,15 +254,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-peers",
         type=int,
-        default=env_int("MAX_ROOM_SIZE", 8),
-        help="kapasitas maksimum peserta per ruang (2-12, default 8)",
+        default=env_int("MAX_ROOM_SIZE", 50),
+        help="kapasitas maksimum peserta per ruang (2-50, default 50)",
     )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    max_peers = max(2, min(12, args.max_peers))
+    max_peers = max(2, min(50, args.max_peers))
     ice_servers = load_ice_servers()
 
     cert_file = key_file = None

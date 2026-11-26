@@ -1,0 +1,14 @@
+{
+  "appId": "com.ruangtemu.app",
+  "appName": "RuangTemu",
+  "webDir": "public",
+  "server": {
+    "cleartext": true,
+    "url": "http://localhost:8765",
+    "port": 8080,
+    "baseUrl": "",
+    "liveReload": {
+      "port": 8081
+    }
+  }
+}

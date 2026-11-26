@@ -4,7 +4,7 @@ RuangTemu adalah aplikasi web ringan untuk **panggilan video**, **audio**, dan *
 
 ## Fitur
 
-- **Video call & audio** langsung antarpeserta lewat WebRTC (mesh untuk 2–8 peserta per ruang).
+- **Video call & audio** langsung antarpeserta lewat WebRTC (mesh untuk 2–50 peserta per ruang).
 - **Berbagi layar** (presentasi, slide, demo) lewat `getDisplayMedia` di desktop.
 - **Obrolan teks** langsung melalui WebSocket ke peserta di ruang yang sama.
 - **Tanpa akun**: kode ruang 3–40 karakter jadi kunci masuk.
@@ -19,7 +19,7 @@ Catatan media: video/audio berjalan **peer-to-peer** (tanpa relay server media).
 ### 1. Server lokal
 
 ```bash
-python server.py --host 0.0.0.0 --port 8000 --max-peers 8
+python server.py --host 0.0.0.0 --port 8000 --max-peers 50
 ```
 
 Atau lewat launcher Windows:
@@ -75,7 +75,7 @@ Untuk panggilan lintas internet yang sangat stabil, set variabel berikut sebelum
 ```bash
 set ICE_SERVERS='[{"urls":["turn:your-turn-server:3478?transport=udp","turn:your-turn-server:443?transport=tcp"],"username":"username","credential":"password","credentialType":"password"},{"urls":["stun:stun.l.google.com:19302"]}]'
 set TURN_URL='turn:your-turn-server:3478?transport=udp,turn:your-turn-server:443?transport=tcp'
-python server.py --host 0.0.0.0 --port 8000 --max-peers 8
+python server.py --host 0.0.0.0 --port 8000 --max-peers 50
 ```
 
 ## Struktur
@@ -110,7 +110,7 @@ python tools/make_icons.py
 - Video/audio: WebRTC peer-to-peer; tidak ada server yang menyimpan atau memproses konten media.
 - Berbagi layar: hanya video; audio dari tab yang di-share tidak dikirim.
 - Kode ruang bersifat case-sensitive setelah sanitasi; gunakan huruf besar/angka.
-- Kapasitas ruang default 8 peserta per mesh.
+- Kapasitas ruang default 50 peserta per mesh.
 
 ## Kontak & pengembangan
 
